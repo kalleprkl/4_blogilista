@@ -104,8 +104,33 @@ describe('favoriteBlog', () => {
 })
 
 describe('mostBlogs', () => {
+
   test('return the correct blogger', () => {
     const result = listHelper.mostBlogs(blogs)
     expect(result).toEqual({ author: "Robert C. Martin", blogs: 3 })
+  })
+
+  test('return one if there is a draw', () => {
+    const array = [
+      { author: 'Throatwobler Mangrove' },
+      { author: 'Throatwobler Mangrove' },
+      { author: 'Throatwobler Mangrove' }
+    ].concat(blogs)
+    const result = listHelper.mostBlogs(array)
+    expect(result).toEqual({ author: 'Throatwobler Mangrove', blogs: 3 })
+  })
+})
+
+describe('mostLikes', () => {
+
+  test('return the correct blogger', () => {
+    const result = listHelper.mostLikes(blogs)
+    expect(result).toEqual({ author: "Edsger W. Dijkstra", likes: 17 })
+  })
+
+  test('return one if there is a draw', () => {
+    const array = [{ author: 'Throatwobler Mangrove', likes: 17 }].concat(blogs)
+    const result = listHelper.mostLikes(array)
+    expect(result).toEqual({ author: 'Throatwobler Mangrove', likes: 17 })
   })
 })
