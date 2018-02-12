@@ -16,8 +16,27 @@ const favoriteBlog = (blogs) => {
     return favorite
 }
 
+const mostBlogs = (blogs) => {
+    let authors = {}
+    blogs.map((blog) => {
+        authors.hasOwnProperty(blog.author) ? authors[blog.author] = authors[blog.author] + 1 : authors[blog.author] = 1
+    })
+    let most = 0
+    let winner = ''
+    for (let author in authors) {
+        if (authors.hasOwnProperty(author)) {
+            if (authors[author] > most ) {
+                most = authors[author]
+                winner = author
+            }
+        }
+    }
+    return { author: winner, blogs: most }
+}
+
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs
 }
