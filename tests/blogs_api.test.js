@@ -107,7 +107,39 @@ describe('post', () => {
             
         expect(response.body.likes).toBe(0)
     })
+
+    test('if title not defined, return 400 Bad request', async () => {
+        const newBlog = {
+            author: "Luxury Yacht",
+            url: 'http://nonsense',
+        }
+
+        const response = await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+            
+        expect(response.error.text).toBe(JSON.stringify('Bad request'))
+    })
+
+    test('if url not defined, return 400 Bad request', async () => {
+        const newBlog = {
+            title: "Mispronounciation",
+            author: "Luxury Yacht",
+        }
+
+        const response = await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+            
+        expect(response.error.text).toBe(JSON.stringify('Bad request'))
+    })
 })
+
+
 
 afterAll(() => {
     server.close()

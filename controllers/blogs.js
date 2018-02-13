@@ -10,7 +10,9 @@ blogsRouter.post('/', async (request, response) => {
 
     const body = request.body
 
-    //const blog = new Blog(request.body)
+    if (body.title === undefined || body.url === undefined) {
+        return response.status(400).json('Bad request')
+    }
 
     const blog = new Blog({
         title: body.title,
