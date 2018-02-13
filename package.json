@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "watch": "nodemon index.js",
-    "test": "jest --verbose"
+    "start": "NODE_ENV=production node index.js",
+    "watch": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,8 @@
   "homepage": "https://github.com/kalleprkl/4_blogilista#readme",
   "devDependencies": {
     "jest": "^22.2.2",
-    "nodemon": "^1.14.12"
+    "nodemon": "^1.14.12",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
     "cors": "^2.8.4",
