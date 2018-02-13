@@ -62,10 +62,34 @@ beforeAll(async () => {
     await Promise.all(promiseArray)
 })
 
-describe('get', () => {
+describe('getAll', () => {
     test('all blogs are retrieved from database', async () => {
         const response = await api.get('/api/blogs')
         expect(response.body.length).toBe(testData.length)
+    })
+})
+
+describe('post', () => {
+    test('new blog is added', async () => {
+        const newBlog = {
+            title: "Mispronounciation",
+            author: "Luxury Yacht",
+            url: 'http://nonsense',
+            likes: 0
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        const response = await api.get('/api/blogs')
+
+        const authors = response.body.map(r => r.author)
+
+        expect(response.body.length).toBe(testData.length + 1)
+        expect(authors).toContain("Luxury Yacht")
     })
 })
 
