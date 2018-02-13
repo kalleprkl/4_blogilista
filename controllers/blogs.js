@@ -8,17 +8,21 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
 
-    const blog = new Blog(request.body)
+    const body = request.body
+
+    //const blog = new Blog(request.body)
+
+    const blog = new Blog({
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        likes: body.likes === undefined ? 0 : body.likes
+    })
 
     const savedBlog = await blog.save()
 
     response.status(201).json(savedBlog)
 
-    /*blog
-        .save()
-        .then(result => {
-            response.status(200).json(result)
-        })*/
 })
 
 module.exports = blogsRouter
