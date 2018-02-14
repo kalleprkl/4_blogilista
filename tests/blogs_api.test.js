@@ -1,14 +1,13 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
-const Blog = require('../models/blog')
-const { resetTestDb, testData, blogsInDb } = require('./test_helper')
+const { addBlog, resetTestDb, testData, blogsInDb } = require('./test_helper')
 
 beforeAll(async () => {
     await resetTestDb()
 })
 
-describe('getAll', () => {
+describe('getAll', async () => {
     test('all blogs are retrieved from database', async () => {
 
         const blogs = await blogsInDb()
@@ -22,7 +21,7 @@ describe('getAll', () => {
     })
 })
 
-describe('post', () => {
+describe('post', async () => {
 
     test('new blog is added', async () => {
         const newBlog = {
@@ -117,6 +116,32 @@ describe('post', () => {
         expect(blogsAfter.find(b => b.author === 'Bid Dummy')).toBe(undefined)
 
         expect(response.error.text).toBe(JSON.stringify('Bad request'))
+    })
+})
+
+describe('delete', async () => {
+
+    test('blog is deleted', async () => {
+
+        await addBlog({
+            title: 'Doomed',
+            author: 'Poor Fella',
+            url: 'http://itsanurlallright',
+            likes: -2
+        })
+
+        const blogsBefore = await blogsInDb()
+
+        const toBeRemoved = blogsBefore.find(b => b.title === 'Doomed')
+        
+        await api
+            .delete('/api/blogs/' + toBeRemoved._id)
+            .expect(204)
+
+        const blogsAfter = await blogsInDb()
+
+        expect(blogsAfter.length).toBe(blogsBefore.length - 1)
+        expect(blogsAfter.find(b => b.title === 'Doomed')).toBe(undefined)
     })
 })
 

@@ -63,8 +63,14 @@ const resetTestDb = async () => {
     await Promise.all(promiseArray)
 }
 
+const addBlog = async (blog) => {
+    blogToBeAdded = new Blog(blog)
+    await blogToBeAdded.save()
+}
+
 module.exports = {
     testData,
     blogsInDb,
-    resetTestDb
+    resetTestDb,
+    addBlog
 }
