@@ -50,8 +50,6 @@ describe('post', () => {
 
     test('likes set to 0 if not defined', async () => {
 
-        await resetTestDb()
-
         const newBlog = {
             title: "Mispronounciation",
             author: "Luxury Yacht",
@@ -77,8 +75,8 @@ describe('post', () => {
 
     test('if title not defined, return 400 Bad request', async () => {
         const newBlog = {
-            author: "Luxury Yacht",
-            url: 'http://nonsense',
+            author: "Timothy Titlesarehard",
+            url: 'http://disndat',
         }
 
         const blogsBefore = await blogsInDb()
@@ -92,14 +90,16 @@ describe('post', () => {
         const blogsAfter = await blogsInDb()
 
         expect(blogsAfter.length).toBe(blogsBefore.length)
+
+        expect(blogsAfter.find(b => b.author === 'Timothy Titlesarehard')).toBe(undefined)
 
         expect(response.error.text).toBe(JSON.stringify('Bad request'))
     })
 
     test('if url not defined, return 400 Bad request', async () => {
         const newBlog = {
-            title: "Mispronounciation",
-            author: "Luxury Yacht",
+            title: "What's an url?",
+            author: "Big Dummy",
         }
 
         const blogsBefore = await blogsInDb()
@@ -114,8 +114,9 @@ describe('post', () => {
 
         expect(blogsAfter.length).toBe(blogsBefore.length)
 
+        expect(blogsAfter.find(b => b.author === 'Bid Dummy')).toBe(undefined)
+
         expect(response.error.text).toBe(JSON.stringify('Bad request'))
-        const all = await api.get('/api/blogs')
     })
 })
 
