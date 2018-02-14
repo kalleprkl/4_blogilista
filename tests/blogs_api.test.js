@@ -133,7 +133,7 @@ describe('delete', async () => {
         const blogsBefore = await blogsInDb()
 
         const toBeRemoved = blogsBefore.find(b => b.title === 'Doomed')
-        
+
         await api
             .delete('/api/blogs/' + toBeRemoved._id)
             .expect(204)
@@ -142,6 +142,36 @@ describe('delete', async () => {
 
         expect(blogsAfter.length).toBe(blogsBefore.length - 1)
         expect(blogsAfter.find(b => b.title === 'Doomed')).toBe(undefined)
+    })
+})
+
+describe('put', async () => {
+
+    test('likes can be updated', async () => {
+
+        await addBlog({
+            title: 'Like me, I like me',
+            author: 'Me',
+            url: 'http://whatadrag',
+            likes: 2
+        })
+
+        const blogsBefore = await blogsInDb()
+
+        const blogToBeUpdated = blogsBefore.find(b => b.author === 'Me')
+
+        expect(blogToBeUpdated.likes).toBe(2)
+
+        await api
+            .put('/api/blogs/' + blogToBeUpdated._id)
+            .send({ likes: 3 })
+            .expect(200)
+
+        const blogsAfter = await blogsInDb()
+
+        const updatedBlog = blogsAfter.find(b => b.author === 'Me')
+
+        expect(updatedBlog.likes).toBe(3)
     })
 })
 
