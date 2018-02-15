@@ -12,6 +12,19 @@ beforeAll(async () => {
     await Promise.all(promiseArray)
 })
 
+describe('getAll', async () => {
+    test('all users in db are returned', async () => {
+        const users = await usersInDb()
+
+        const usersHttp = await api
+            .get('/api/users')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        expect(usersHttp.body.length).toBe(users.length)
+    })
+})
+
 describe('post', async () => {
     test('user can be added', async () => {
         const newUser = {
@@ -22,10 +35,10 @@ describe('post', async () => {
         }
 
         const usersBefore = await usersInDb()
-        
-        api.post('/api/users')
+
+        await api.post('/api/users')
             .send(newUser)
-            .expect(200)
+            .expect(201)
             .expect('Content-Type', /application\/json/)
 
         const usersAfter = await usersInDb()
