@@ -2,9 +2,9 @@ POST http://localhost:3001/api/blogs
 content-type: application/json
 
 {
-  "title": "Populate testi 3",
+  "title": "Populate testi 2",
   "author": "mister",
   "url": "http://web",
   "likes": "3",
-  "user": "5a859726efc0733ca11a2db4"
+  "user": "5a849861f900fa5070f656cf"
 }
