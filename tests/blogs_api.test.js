@@ -1,10 +1,15 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
-const { addBlog, resetTestDb, testData, blogsInDb } = require('./test_helper')
+const { addBlog, resetBlogsDb, testData, blogsInDb, testDataBlogs } = require('./test_helper')
+const Blog = require('../models/blog')
 
 beforeAll(async () => {
-    await resetTestDb()
+    //await resetBlogsDb()
+    await Blog.remove({})
+    const blogObjects = testDataBlogs.map(blog => new Blog(blog))
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray)
 })
 
 describe('getAll', async () => {
@@ -176,5 +181,6 @@ describe('put', async () => {
 })
 
 afterAll(() => {
+    //console.log('BLOGS')
     server.close()
 })

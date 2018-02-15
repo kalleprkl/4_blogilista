@@ -1,6 +1,7 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
-const testData = [
+const testDataBlogs = [
     {
         _id: "5a422a851b54a676234d17f7",
         title: "React patterns",
@@ -51,26 +52,55 @@ const testData = [
     }
 ]
 
+const testDataUsers = [
+    {
+        username: 'Kepe',
+        name: 'Kokki',
+        legal: false
+    }
+]
+
 const blogsInDb = async () => {
     const blogs = await Blog.find({})
     return blogs
 }
 
-const resetTestDb = async () => {
+/*const resetBlogsDb = async () => {
     await Blog.remove({})
-    const blogObjects = testData.map(blog => new Blog(blog))
+    const blogObjects = testDataBlogs.map(blog => new Blog(blog))
     const promiseArray = blogObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
-}
+}*/
 
 const addBlog = async (blog) => {
     blogToBeAdded = new Blog(blog)
     await blogToBeAdded.save()
 }
 
+const addUser = async (user) => {
+    userToBeAdded = new Blog(user)
+    await userToBeAdded.save()
+}
+
+const usersInDb = async () => {
+    const users = await User.find({})
+    return users
+}
+
+/*const resetUsersDb = async () => {
+    await User.remove({})
+    const userObjects = testDataUsers.map(user => new User(user))
+    const promiseArray = userObjects.map(user => user.save())
+    await Promise.all(promiseArray)
+}*/
+
 module.exports = {
-    testData,
+    testDataBlogs,
+    testDataUsers,
     blogsInDb,
-    resetTestDb,
-    addBlog
+    //resetBlogsDb,
+    addBlog,
+    addUser,
+    usersInDb,
+    //resetUsersDb
 }
