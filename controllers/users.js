@@ -52,9 +52,9 @@ usersRouter.post('/', async (request, response) => {
         })
 
         const savedUser =  await user.save()
-
+        
         response.status(201).json(savedUser)
-
+        
     } catch (exception) {
         console.log(exception)
         response.status(500).json({ error: 'it\'s all gone to hell' })

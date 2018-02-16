@@ -12,7 +12,7 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
 
     const body = request.body
-    
+
     try {
         const token = request.token
         const decodedToken = jwt.verify(token, process.env.SECRET)
@@ -48,8 +48,27 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).json('Removed from database')
+    try {
+        const id = request.params.id
+        const toBeRemoved = await Blog.findById(id)
+
+        const token = request.token
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+
+        if (!token || !decodedToken.id) {
+            return response.status(401).json({ error: 'token missing or invalid' })
+        }
+
+        if (toBeRemoved.user.toString() !== decodedToken.id.toString()) {
+            return response.status(401).json({ error: 'You do not have the right' })
+        }
+
+        await Blog.findByIdAndRemove(id)
+        response.status(204).json('Removed from database')
+    } catch (exception) {
+        console.log(exception)
+        response.status(500).json({ error: 'something went wrong...' })
+    }
 })
 
 blogsRouter.put('/:id', async (request, response) => {
