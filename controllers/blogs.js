@@ -59,7 +59,7 @@ blogsRouter.delete('/:id', async (request, response) => {
             return response.status(401).json({ error: 'token missing or invalid' })
         }
 
-        if (toBeRemoved.user.toString() !== decodedToken.id.toString()) {
+        if (toBeRemoved.user && toBeRemoved.user.toString() !== decodedToken.id.toString()) {
             return response.status(401).json({ error: 'You do not have the right' })
         }
 
@@ -72,8 +72,8 @@ blogsRouter.delete('/:id', async (request, response) => {
 })
 
 blogsRouter.put('/:id', async (request, response) => {
-    await Blog.findByIdAndUpdate(request.params.id, request.body)
-    response.status(200).json('Updated')
+    const blog = await Blog.findByIdAndUpdate(request.params.id, request.body, {new: true})
+    response.status(200).json(blog)
 })
 
 module.exports = blogsRouter
